@@ -55,3 +55,4 @@ npm run preview
 
 - 修改 `scripts/lib/voice/`（解说文风与牌义），运行 `npm run generate-data` 重新生成 JSON（78 张 × 15 场景 × 正逆位 = 2340 条）
 - 替换 `index.html` / CSS 中的巫师与布帘样式，或放入 `public/images/` 使用真实图片
+# tarot-web
