@@ -1,0 +1,610 @@
+:root {
+  --bg-deep: #0d0a14;
+  --bg-panel: #1a1428;
+  --gold: #c9a227;
+  --gold-light: #f0d78c;
+  --purple: #6b4c9a;
+  --purple-dark: #3d2a5c;
+  --text: #e8e0f0;
+  --text-dim: #a89bb8;
+  --card-w: clamp(100px, 22vw, 140px);
+  --card-h: calc(var(--card-w) * 1.65);
+  --font-display: 'Cinzel', 'Noto Serif SC', serif;
+  --font-body: 'Noto Serif SC', serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-deep);
+  color: var(--text);
+  min-height: 100dvh;
+}
+
+#app {
+  min-height: 100dvh;
+  position: relative;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ── 布帘 ── */
+.curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.curtain-panel {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  background:
+    linear-gradient(105deg, transparent 40%, rgba(201, 162, 39, 0.08) 50%, transparent 60%),
+    repeating-linear-gradient(
+      90deg,
+      #2a1838 0px,
+      #3d2555 8px,
+      #251535 16px,
+      #4a3068 24px
+    );
+  box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.6);
+  transition: transform 1.4s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.curtain-left {
+  left: 0;
+  transform-origin: left center;
+  border-right: 3px solid var(--gold);
+}
+
+.curtain-right {
+  right: 0;
+  transform-origin: right center;
+  border-left: 3px solid var(--gold);
+}
+
+.curtain.open .curtain-left {
+  transform: translateX(-100%);
+}
+
+.curtain.open .curtain-right {
+  transform: translateX(100%);
+}
+
+.curtain-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(201, 162, 39, 0.25) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.8s ease 0.6s;
+}
+
+.curtain.open .curtain-glow {
+  opacity: 1;
+}
+
+/* ── 主布局 ── */
+.main {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(107, 76, 154, 0.35) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 90%, rgba(61, 42, 92, 0.4) 0%, transparent 50%),
+    var(--bg-deep);
+  padding-bottom: 2rem;
+}
+
+.wizard-header {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding: 1.5rem 1rem 0.5rem;
+}
+
+.wizard-portrait {
+  width: min(220px, 55vw);
+  height: min(280px, 45vh);
+  background:
+    radial-gradient(ellipse at 50% 30%, rgba(240, 215, 140, 0.15) 0%, transparent 50%),
+    linear-gradient(180deg, #2a1f42 0%, #15101f 100%);
+  border: 2px solid var(--gold);
+  border-radius: 12px 12px 80px 80px;
+  position: relative;
+  box-shadow:
+    0 0 40px rgba(201, 162, 39, 0.2),
+    inset 0 -20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.wizard-portrait::before {
+  content: '🧙';
+  font-size: 5rem;
+  position: absolute;
+  top: 28%;
+  left: 50%;
+  transform: translateX(-50%);
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+}
+
+.wizard-portrait::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 10%;
+  right: 10%;
+  height: 40%;
+  background: linear-gradient(to top, rgba(13, 10, 20, 0.9), transparent);
+  border-radius: 0 0 78px 78px;
+}
+
+.stars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(1px 1px at 20% 30%, white, transparent),
+    radial-gradient(1px 1px at 60% 20%, white, transparent),
+    radial-gradient(1.5px 1.5px at 80% 50%, var(--gold-light), transparent),
+    radial-gradient(1px 1px at 40% 70%, white, transparent);
+  opacity: 0.6;
+  animation: twinkle 4s ease-in-out infinite alternate;
+}
+
+@keyframes twinkle {
+  from {
+    opacity: 0.4;
+  }
+  to {
+    opacity: 0.8;
+  }
+}
+
+/* ── RPG 对话框 ── */
+.dialog-section {
+  flex: 1;
+  padding: 1rem 1.25rem 2rem;
+  max-width: 520px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.dialog-box {
+  background: var(--bg-panel);
+  border: 2px solid var(--purple);
+  border-radius: 4px;
+  padding: 1.25rem 1.5rem;
+  min-height: 100px;
+  position: relative;
+  box-shadow:
+    inset 0 0 30px rgba(107, 76, 154, 0.15),
+    4px 4px 0 var(--purple-dark);
+}
+
+.dialog-box::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 24px;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid var(--purple);
+}
+
+.dialog-text {
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: var(--text);
+}
+
+.dialog-cursor {
+  color: var(--gold);
+  animation: blink 0.8s step-end infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin-top: 1.25rem;
+}
+
+.choice-btn {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  padding: 0.85rem 1.25rem;
+  background: linear-gradient(180deg, #3d2a5c 0%, #2a1f42 100%);
+  color: var(--gold-light);
+  border: 1px solid var(--gold);
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: left;
+  transition:
+    transform 0.15s,
+    box-shadow 0.15s,
+    background 0.15s;
+}
+
+.choice-btn:hover:not(:disabled) {
+  transform: translateX(4px);
+  box-shadow: 0 0 16px rgba(201, 162, 39, 0.35);
+  background: linear-gradient(180deg, #4d3a6c 0%, #3a2f52 100%);
+}
+
+.choice-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ── 确认 ── */
+.confirm-section {
+  flex: 1;
+  padding: 1.5rem 1.25rem;
+  max-width: 480px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.confirm-card {
+  background: var(--bg-panel);
+  border: 2px solid var(--gold);
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 0 30px rgba(201, 162, 39, 0.15);
+}
+
+.confirm-card h2 {
+  font-family: var(--font-display);
+  color: var(--gold-light);
+  font-size: 1.35rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.confirm-card dl {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.confirm-card dt {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
+
+.confirm-card dd {
+  color: var(--text);
+  font-size: 1.05rem;
+  margin-left: 0;
+}
+
+.confirm-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+/* ── 按钮 ── */
+.btn {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 1px solid var(--gold);
+  flex: 1;
+  min-width: 120px;
+}
+
+.btn-primary {
+  background: linear-gradient(180deg, #8b6914 0%, #5c4510 100%);
+  color: var(--gold-light);
+}
+
+.btn-primary:hover {
+  filter: brightness(1.15);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-dim);
+  border-color: var(--purple);
+}
+
+.btn-ghost:hover {
+  color: var(--text);
+  border-color: var(--gold);
+}
+
+/* ── 抽牌区 ── */
+.reading-section {
+  flex: 1;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.reading-hint {
+  font-family: var(--font-display);
+  color: var(--gold-light);
+  text-align: center;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  min-height: 1.5em;
+}
+
+.card-stage {
+  position: relative;
+  width: 100%;
+  max-width: 720px;
+  min-height: calc(var(--card-h) + 80px);
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: clamp(0.5rem, 3vw, 1.5rem);
+  padding: 2rem 0.5rem 1rem;
+  flex-wrap: wrap;
+}
+
+.card-slot {
+  width: var(--card-w);
+  height: var(--card-h);
+  position: relative;
+  perspective: 800px;
+}
+
+.card-slot .slot-label {
+  position: absolute;
+  top: -1.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.8rem;
+  color: var(--gold);
+  white-space: nowrap;
+  font-family: var(--font-display);
+}
+
+.tarot-card {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.tarot-card .card-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+
+.tarot-card.flipped .card-inner {
+  transform: rotateY(180deg);
+}
+
+.card-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: 8px;
+  border: 2px solid var(--gold);
+  overflow: hidden;
+}
+
+.card-back {
+  background:
+    repeating-conic-gradient(from 0deg, #3d2555 0deg 15deg, #251535 15deg 30deg),
+    radial-gradient(circle at center, rgba(201, 162, 39, 0.3) 0%, transparent 70%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-back::after {
+  content: '✦';
+  font-size: 2.5rem;
+  color: var(--gold);
+  text-shadow: 0 0 20px rgba(201, 162, 39, 0.8);
+}
+
+.card-front {
+  transform: rotateY(180deg);
+  background: linear-gradient(160deg, #2a1f42 0%, #15101f 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  text-align: center;
+}
+
+.card-front .card-num {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  color: var(--gold);
+  margin-bottom: 0.25rem;
+}
+
+.card-front .card-name {
+  font-size: 0.85rem;
+  color: var(--gold-light);
+  line-height: 1.3;
+}
+
+.card-front .card-symbol {
+  font-size: 2rem;
+  margin: 0.35rem 0;
+  filter: drop-shadow(0 2px 8px rgba(201, 162, 39, 0.4));
+}
+
+.tarot-card.reversed .card-front {
+  transform: rotateY(180deg) rotate(180deg);
+}
+
+.tarot-card.animating {
+  z-index: 50;
+}
+
+/* ── 结果 ── */
+.result-panel {
+  width: 100%;
+  max-width: 640px;
+  padding: 1rem 0.5rem 2rem;
+}
+
+.result-panel h2 {
+  font-family: var(--font-display);
+  color: var(--gold-light);
+  text-align: center;
+  margin-bottom: 1.25rem;
+  font-size: 1.25rem;
+}
+
+.result-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.result-item {
+  background: var(--bg-panel);
+  border-left: 3px solid var(--gold);
+  padding: 1rem 1.25rem;
+  border-radius: 0 6px 6px 0;
+}
+
+.result-item h3 {
+  font-family: var(--font-display);
+  color: var(--gold);
+  font-size: 1rem;
+  margin-bottom: 0.35rem;
+}
+
+.result-item .card-meta {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  margin-bottom: 0.5rem;
+}
+
+.reading-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.reading-intro {
+  font-size: 0.88rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.reading-body {
+  line-height: 1.8;
+  font-size: 0.98rem;
+  color: var(--text);
+  margin: 0;
+}
+
+.reading-note {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  opacity: 0.72;
+  line-height: 1.55;
+  margin: 0.35rem 0 0;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(107, 76, 154, 0.25);
+}
+
+/* 术语悬停释义 */
+.term {
+  color: var(--gold-light);
+  border-bottom: 1px dashed var(--gold);
+  cursor: help;
+  position: relative;
+  font-weight: 600;
+}
+
+.term::after {
+  content: attr(data-tip);
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 8px);
+  transform: translateX(-50%) scale(0.96);
+  width: max-content;
+  max-width: min(280px, 85vw);
+  padding: 0.55rem 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--text);
+  background: #2a1f42;
+  border: 1px solid var(--gold);
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease,
+    visibility 0.15s;
+  z-index: 20;
+}
+
+.term:hover::after,
+.term:focus::after,
+.term:focus-visible::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) scale(1);
+}
+
+.term:focus {
+  outline: 1px solid var(--gold);
+  outline-offset: 2px;
+}
+
+#btn-restart {
+  display: block;
+  margin: 1.5rem auto 0;
+  max-width: 240px;
+  width: 100%;
+}
+
+@media (max-width: 480px) {
+  .confirm-actions {
+    flex-direction: column;
+  }
+}

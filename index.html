@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="神秘塔罗占卜 — 抽一张或三张，探索今日运势与人生指引" />
+    <title>神秘塔罗占卜</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Noto+Serif+SC:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="app">
+      <!-- 布帘开场 -->
+      <div id="curtain" class="curtain" aria-hidden="true">
+        <div class="curtain-panel curtain-left"></div>
+        <div class="curtain-panel curtain-right"></div>
+        <div class="curtain-glow"></div>
+      </div>
+
+      <!-- 主界面 -->
+      <main id="main" class="main hidden">
+        <header class="wizard-header">
+          <div class="wizard-portrait" role="img" aria-label="神秘巫师"></div>
+          <div class="stars"></div>
+        </header>
+
+        <section id="dialog-section" class="dialog-section">
+          <div class="dialog-box">
+            <p id="dialog-text" class="dialog-text"></p>
+            <span id="dialog-cursor" class="dialog-cursor hidden">▌</span>
+          </div>
+          <div id="choices" class="choices"></div>
+        </section>
+
+        <!-- 确认页 -->
+        <section id="confirm-section" class="confirm-section hidden">
+          <div class="confirm-card">
+            <h2>占卜确认</h2>
+            <dl id="confirm-details"></dl>
+            <div class="confirm-actions">
+              <button type="button" id="btn-back" class="btn btn-ghost">返回修改</button>
+              <button type="button" id="btn-start" class="btn btn-primary">开始抽牌</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 抽牌与结果 -->
+        <section id="reading-section" class="reading-section hidden">
+          <p id="reading-hint" class="reading-hint"></p>
+          <div id="card-stage" class="card-stage"></div>
+          <div id="result-panel" class="result-panel hidden">
+            <h2 id="result-title">解读结果</h2>
+            <div id="result-cards" class="result-cards"></div>
+            <button type="button" id="btn-restart" class="btn btn-primary">再次占卜</button>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
