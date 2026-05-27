@@ -1,4 +1,4 @@
-const TERM_RE = /\[\[([a-z_]+)\]\]/g;
+const TERM_RE = /\[\[([a-z0-9_]+)\]\]/g;
 
 function escapeHtml(str) {
   return str
@@ -11,7 +11,8 @@ function escapeHtml(str) {
 function wrapTerm(id, glossary) {
   const item = glossary?.[id];
   const label = item?.label ?? id;
-  const tip = escapeHtml(item?.tip ?? '');
+  if (!item?.tip) return escapeHtml(label);
+  const tip = escapeHtml(item.tip);
   return `<span class="term" tabindex="0" role="button" data-tip="${tip}">${escapeHtml(label)}</span>`;
 }
 

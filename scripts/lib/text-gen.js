@@ -1,4 +1,5 @@
 import { composeReading } from './voice/index.js';
+import { getManualReading } from './manual-readings.js';
 
 const SINGLE_THEMES = ['today', 'question', 'advice'];
 const TRIPLE_THEMES = ['fortune', 'emotion', 'life', 'career'];
@@ -19,21 +20,28 @@ export function generateAllInterpretations(cards) {
   for (const card of cards) {
     for (const theme of SINGLE_THEMES) {
       data.single[theme][card.id] = {
-        upright: composeReading(card, { mode: 'single', theme, reversed: false }),
-        reversed: composeReading(card, { mode: 'single', theme, reversed: true }),
+        upright: withManual(card, { mode: 'single', theme, reversed: false }),
+        reversed: withManual(card, { mode: 'single', theme, reversed: true }),
       };
     }
     for (const theme of TRIPLE_THEMES) {
       for (const slot of SLOTS) {
         data.spread3[theme][slot][card.id] = {
-          upright: composeReading(card, { mode: 'triple', theme, slot, reversed: false }),
-          reversed: composeReading(card, { mode: 'triple', theme, slot, reversed: true }),
+          upright: withManual(card, { mode: 'triple', theme, slot, reversed: false }),
+          reversed: withManual(card, { mode: 'triple', theme, slot, reversed: true }),
         };
       }
     }
   }
 
   return data;
+}
+
+function withManual(card, ctx) {
+  const generated = composeReading(card, ctx);
+  const manual = getManualReading(card, ctx);
+  if (!manual) return generated;
+  return { ...generated, ...manual };
 }
 
 export function countEntries(data) {

@@ -12,9 +12,12 @@ import {
   getGlossary,
   getSingleEntry,
   getTripleEntry,
-  getCardById,
 } from './js/data.js';
-import { buildReadingHtml, normalizeEntry } from './js/render-reading.js';
+import {
+  buildReadingHtml,
+  normalizeEntry,
+  renderRichText,
+} from './js/render-reading.js';
 import { createDialogController } from './js/dialog.js';
 import {
   playCurtainOpen,
@@ -199,7 +202,6 @@ function renderResults(slots) {
   els.resultCards.innerHTML = '';
 
   slots.forEach(({ slot, card }) => {
-    const meta = getCardById(data, card.id);
     let title;
     let raw;
 
@@ -212,12 +214,13 @@ function renderResults(slots) {
     }
 
     const entry = normalizeEntry(raw, card.reversed);
+    const cardNameHtml = `<span class="card-name-bracket">[</span>${renderRichText(`[[${card.id}]]`, glossary)}<span class="card-name-bracket">]</span>`;
 
     const item = document.createElement('article');
     item.className = 'result-item';
     item.innerHTML = `
       <h3>${title}</h3>
-      <p class="card-meta">${meta.name}</p>
+      <p class="card-meta">${cardNameHtml}</p>
       <div class="reading-content">${buildReadingHtml(entry, glossary)}</div>
     `;
     els.resultCards.appendChild(item);

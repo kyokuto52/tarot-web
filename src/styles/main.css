@@ -512,9 +512,26 @@ body {
 }
 
 .result-item .card-meta {
-  font-size: 0.9rem;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
   color: var(--text-dim);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.6rem;
+  line-height: 1.4;
+}
+
+.result-item .card-meta .term {
+  color: #d8d1e3;
+  -webkit-text-stroke: 0.35px rgba(255, 255, 255, 0.55);
+  border-bottom-color: rgba(255, 255, 255, 0.45);
+  text-shadow:
+    0 0 8px rgba(255, 255, 255, 0.12),
+    0 1px 2px rgba(0, 0, 0, 0.45);
+}
+
+.card-name-bracket {
+  color: var(--text-dim);
+  opacity: 0.72;
+  margin: 0 0.08rem;
 }
 
 .reading-content {
@@ -535,6 +552,15 @@ body {
   font-size: 0.98rem;
   color: var(--text);
   margin: 0;
+}
+
+.site-footer {
+  margin-top: auto;
+  padding: 1.5rem 1rem 0;
+  color: var(--text-dim);
+  font-size: 0.78rem;
+  text-align: center;
+  opacity: 0.72;
 }
 
 .reading-note {
@@ -563,7 +589,7 @@ body {
   bottom: calc(100% + 8px);
   transform: translateX(-50%) scale(0.96);
   width: max-content;
-  max-width: min(280px, 85vw);
+  max-width: min(280px, calc(100vw - 2rem));
   padding: 0.55rem 0.75rem;
   font-size: 0.8rem;
   font-weight: 400;
@@ -606,5 +632,25 @@ body {
 @media (max-width: 480px) {
   .confirm-actions {
     flex-direction: column;
+  }
+}
+
+@media (max-width: 640px) {
+  .term::after {
+    position: fixed;
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    width: auto;
+    max-width: none;
+    transform: translateY(0.25rem);
+    text-align: left;
+    z-index: 1000;
+  }
+
+  .term:hover::after,
+  .term:focus::after,
+  .term:focus-visible::after {
+    transform: translateY(0);
   }
 }
